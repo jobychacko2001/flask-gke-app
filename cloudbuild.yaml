@@ -1,8 +1,15 @@
-
 steps:
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/frontend:$SHORT_SHA', './frontend']
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/backend:$SHORT_SHA', './backend']
-- name: 'gcr.io/cloud-builders/kubectl'
-  args: ['apply', '-f', './deployment']
+  # Build the frontend Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/frontend:$SHORT_SHA', './frontend']
+
+  # Build the backend Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/backend:$SHORT_SHA', './backend']
+
+  # Apply Kubernetes deployment configuration
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f', './deployment']
+
+options:
+  logs_bucket: gs://ica_doct_1_bucket
